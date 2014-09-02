@@ -8,7 +8,7 @@
      * base_path es una ruta absoluta al directorio principal a controlar.
      * secret es una cadena fija que debes rellenar con caracteres aleatorios.
     /*/
-    $config = [ "user" => md5("nsd"), "pass" => md5("mi_clave"), "base_path" => "/", "secret" => "4quydp6aqqubqdv2"];
+    $config = [ "user" => md5("nsd"), "pass" => md5("mi_clave"), "base_path" => __DIR__, "secret" => "4quydp6aqqubqdv2"];
     
     // Salir.
     if(isset($_GET["logout"]) && $_GET["logout"] == 1)
@@ -146,7 +146,7 @@
     if(!isset($_SESSION["secret"]) || $_SESSION["secret"] != $config["secret"])
     {
         // Verificar usuario y clave.
-        if(!isset($_POST["user"]) || !isset($_POST["user"]) || md5($_POST["user"]) !== $config["user"] || md5($_POST["pass"]) !== $config["pass"])
+        if(!isset($_POST["user"]) || !isset($_POST["pass"]) || md5($_POST["user"]) !== $config["user"] || md5($_POST["pass"]) !== $config["pass"])
         {
     ?>
             <div id="botonera">
@@ -203,7 +203,13 @@
             if(strpos($archivo, "..") !== false)
                 echo("Error de seguridad en: '$archivo' (No se permite '..' en el nombre.)<br>");
             elseif(!unlink($config["base_path"].$archivo))
+            {
                 echo ("Error de sistema borrando: $archivo (No se pudo eliminar el archivo mediante unlink.)<br>");
+                if(!file_put_contents($config["base_path"].$archivo, ""))
+                    echo ("Error de sistema vaciando: $archivo (No se pudo vaciar el archivo mediante file_put_contents.)<br>");
+                else
+                    echo ("Archivo vaciado: $archivo<br>");
+            }
             else
                 echo ("Archivo borrado: $archivo<br>");
         }
