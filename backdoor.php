@@ -9,7 +9,7 @@
      * secret es una cadena fija que debes rellenar con caracteres aleatorios.
     /*/
     $config = [ "user" => md5("nsd"), "pass" => md5("mi_clave"), "base_path" => __DIR__, "secret" => "4quydp6aqqubqdv2"];
-    
+
     // Salir.
     if(isset($_GET["logout"]) && $_GET["logout"] == 1)
     {
@@ -32,68 +32,71 @@
             <title>Panel de control de archivos</title>
             <style>
                 /* Estilos visuales de la pagina embebidos */
-                body
+                body, html
                 {
-                    background-image:-webkit-linear-gradient(top,#f9f9f9,#e9e9e9);
+                    margin: 0;
+                    padding: 0;
+                    background: #ecf0f1;
                 }
-                #contenido , #botonera , #log
+                #contenido, #botonera, #log
                 {
-                    width:900px;
-                    border:3px double #666;
-                    padding:10px;
-                    color:#222;
-                    font-family:arial;
-                    font-size:12px;
-                    font-variant:small-caps;
-                    font-weight:bold;
-                    margin:10px auto;
-                    box-shadow:rgba(0,0,0,0.498039) 0 1px 3px,rgba(255,255,255,0.701961) 0 0 1px inset;
-                    background-image:-webkit-gradient(linear,0 0%,0 100%,from(#0e4168),color-stop(0.1,#236ba3),color-stop(0.5,#236ba3),color-stop(0.9,#236ba3),to(#0e4168));
-                    min-height:40px;
-                    border-radius:5px;
-                    text-align:center;
+                    width: 100%;
+                    font-family: arial;
+                    margin: 0 auto;
                 }
-                form td , form table
+                body header
                 {
-                    border:1px solid #666;
-                    padding:10px;
-                    color:#222;
-                    font-family:arial;
-                    font-size:15px;
-                    font-variant:small-caps;
-                    font-weight:bold;
-                    margin:10px auto;
-                    box-shadow:rgba(0,0,0,0.498039) 0 1px 3px,rgba(255,255,255,0.701961) 0 0 1px inset;
-                    background-image:-webkit-linear-gradient(top,#fefefe,#ededed);
-                    border-radius:3px
+                    border-bottom: 2px solid #34495E;
+                    margin-bottom: 5px;
+                    background: #2980B9;
+                    overflow: hidden;
                 }
-                form table
+                body header input
                 {
-                    width:875px;
-                    margin:5px auto;
-                    border-radius:6px
+                    float: left;
                 }
-                th
+                body header a
                 {
-                    border:1px solid #666;
-                    padding:10px;
-                    color:#eee;
-                    font-family:arial;
-                    font-size:20px;
-                    font-variant:small-caps;
-                    font-weight:bold;
-                    margin:10px auto;
-                    box-shadow:rgba(0,0,0,0.498039) 0 1px 3px,rgba(255,255,255,0.701961) 0 0 1px inset;
-                    background-image:-webkit-linear-gradient(top,#555,#111);
-                    border-radius:3px;
-                    text-align:center;
+                    float: right;
+                }                
+                body section
+                {
+                    width: 100%;
+                }                
+                body > form > section > table
+                {
+                    width: 90%;
+                    border: 1px solid #34495E;
+                    padding: 0;
+                    border-collapse: collapse;
+                    margin: 0 5%;
+                }
+                body > form > section > table th
+                {
+                    border: 1px solid #34495E;
+                    padding: 3px 10px;
+                    color: #ECF0F1;
+                    font-size: 14px;
+                    text-transform: uppercase;
+                    background: #2C3E50;
+                }
+                body > form > section > table td
+                {
+                    border: 1px solid #34495E;
+                    padding: 5px 10px;
+                }
+                body > form > section > table td
+                {
+                    border: 1px solid #34495E;
+                    padding: 5px 10px;
                 }
                 .directorio
                 {
                     background-image:-webkit-linear-gradient(top,#ccc,#aaa);
                     text-align:center;
                 }
-                input[type=button] , input[type=submit] , .button
+                
+                .button
                 {
                     background-image:-webkit-gradient(linear,0 0%,0 100%,from(#fff),color-stop(0.25,#ebebeb),color-stop(0.5,#dbdbdb),to(#b5b5b5));
                     border:1px solid #949494;
@@ -111,13 +114,15 @@
                     text-shadow:rgba(0,0,0,0.2) 0 -1px 0px,#fff 0 1px 0;
                     font-variant:small-caps;
                 }
-                input[type=button]:hover , input[type=submit]:hover , .button:hover {
+                .button:hover 
+                {
                     box-shadow:#000 0 0 10px;
                     color:#000;
                     cursor:pointer;
                     font-weight:bold
                 }
-                input[type=button]:active , input[type=submit]:active , .button:active{
+                .button:active
+                {
                     box-shadow:#efefef 0 0 10px
                 }
                 #error{
@@ -149,10 +154,10 @@
         if(!isset($_POST["user"]) || !isset($_POST["pass"]) || md5($_POST["user"]) !== $config["user"] || md5($_POST["pass"]) !== $config["pass"])
         {
     ?>
-            <div id="botonera">
+            <header>
                 <div id="error">Error! Debes ser un usuario autorizado.</div>
-            </div>
-            <div id="contenido">
+            </header>
+            <section>
                 <form id="formulario" method="post" action="?login=1">
                     <table>
                         <tr>
@@ -168,69 +173,69 @@
                         </tr>
                     </table>
                 </form>
-            </div>
+            </section>
     <?php
         }
         else
         {
             // Logueo correcto, habilitar acceso.
             $_SESSION["secret"] = $config["secret"];
-
-            // Si tu server lo permite, puedes reemplazar este echo por un: header("location: $_SERVER[REQUEST_URI]");
-    ?>
-            <div id="botonera">
-                <a href="<?=$_SERVER["REQUEST_URI"];?>" class="button">Acceder!</a>
-            </div>
-    <?php
         }
     }
-    else
+
+    if(isset($_SESSION["secret"]) && $_SESSION["secret"] == $config["secret"])
     {
         // Estas habilitado.
 ?>
-            <form id="formulario" method="post">
-                <div id="botonera">
-                    <input type="submit" value="eliminar seleccionados" style="float:left" />
-                    <a href="?logout=1" class="button" style="float:right" >Cerrar & Salir.</a>
-                </div>
-                <div id="log">
+            <form method="post">
+                <header>
+                    <input type="submit" value="Eliminar seleccionados" class="button">
+                    <a href="?logout=1" class="button">Cerrar & Salir.</a>
+                </header>
 <?php
     // Si tengo que eliminar elimino.
     if(isset($_POST["datos"]) && ($_POST["datos"] = array_filter($_POST["datos"])))
     {
+        echo("<div id=\"log\">
+                <dl>");
         foreach($_POST["datos"] as $archivo)
         {
             if(strpos($archivo, "..") !== false)
                 echo("Error de seguridad en: '$archivo' (No se permite '..' en el nombre.)<br>");
-            elseif(!unlink($config["base_path"].$archivo))
+            elseif(!unlink($config["base_path"]."/".$archivo))
             {
-                echo ("Error de sistema borrando: $archivo (No se pudo eliminar el archivo mediante unlink.)<br>");
-                if(!file_put_contents($config["base_path"].$archivo, ""))
-                    echo ("Error de sistema vaciando: $archivo (No se pudo vaciar el archivo mediante file_put_contents.)<br>");
+                echo("<dt class=\"error\">Unlink fail:</dt>
+                        <dd>$config[base_path]/$archivo</dd>");
+                if(!file_put_contents($config["base_path"]."/".$archivo, ""))
+                    echo ("<dt class=\"error\">File_put_contents fail:</dt>
+                        <dd>$config[base_path]/$archivo</dd>");
                 else
-                    echo ("Archivo vaciado: $archivo<br>");
+                    echo("<dt class=\"warning\">File clear:</dt>
+                        <dd>$config[base_path]/$archivo</dd>");
             }
             else
-                echo ("Archivo borrado: $archivo<br>");
+                echo("<dt class=\"ok\">File deleted:</dt>
+                        <dd>$config[base_path]/$archivo</dd>");
         }
+        echo("</dl>
+            </div>");
     }
 ?>
-                </div>
-                <div id="contenido">
+                <section id="contenido">
                     <table>
                         <thead>
                             <tr>
                                 <th> Selec. </th> <th> Path </th> <th> Archivo </th>
                             </tr>
-                        </thead>                        
+                        </thead>
 <?php
     function listararchivos($base_path, $root)
     {
-        if(is_dir($base_path)) 
+        if(is_dir($base_path))
         {
-            if($dir = opendir($base_path)) 
+            if($dir = opendir($base_path))
             {
-                while(($archivo = readdir($dir))) 
+                while(($archivo = readdir($dir)))
                 {
                     if(($archivo != ".") && ($archivo != ".."))
                     {
@@ -252,19 +257,19 @@
                 closedir($dir);
             }
         }
-        else        
+        else
             echo "Error de sistema: '$base_path' (No es ruta valida)<br>";
     }
-    
+
     // Muestro los archivos del directorio permitido.
     listararchivos($config["base_path"], $config["base_path"]);
 ?>
                     </table>
-                </div>
+                </section>
             </form>
-<?php 
+<?php
     }
 ?>
         </body>
     </html>
- 
+
